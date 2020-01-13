@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>share Album</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <script
+    type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+  <!-- Custom Theme files -->
+  <link href="/css/style.css" rel="stylesheet" type="text/css" media="all" />
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+  <!-- //Custom Theme files -->
+  <!-- web font -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+
+
+
+  <!-- //web font -->
+</head>
+
+<body>
+  <!-- main -->
+  <div class="main-w3layouts wrapper">
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/user">Profile</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/dashboard">Home</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/signout"><span class="glyphicon glyphicon-user"></span>Logout</a></li>
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="main-agileinfo">
+      <div class="agileits-top">
+        <form class="login" id='uploadForm' method="post">
+          <label style="color:white">To:</label>
+          <input id="text_email" type="text" name="to" required="">
+          <input type="submit" id='submit' value="SUBMIT">
+        </form>
+      </div>
+    </div>
+    <!-- copyright -->
+    <div class="colorlibcopy-agile">
+      <p>© 2019 C Solulab. All rights reserved </p>
+      <span id='status'></span>
+    </div>
+
+  </div>
+  <!-- //main -->
+  <script>
+    var email = document.getElementById("text_email").value;
+    var r;
+    $("#uploadForm").submit(function (e) {
+
+      e.preventDefault(); // avoid to execute the actual submit of the form.
+
+      var form = $(this);
+      var url = '/shareUser/{{albumId}}';
+
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: form.serialize(), // serializes the form's elements.
+        success: function (data) {
+          if (data.message == 'not registered') {
+
+            r = confirm("user not registered!want to invite??");
+            if (r == true) {
+
+              var person = prompt("Please enter invite email:");
+              if (person == null || person == "") {
+                var person = prompt("Please enter proper invite email:");
+              } else {
+                b(person);
+              }
+            } else {
+              alert("not invite")
+            }
+          }
+          else {
+            alert(data.message);
+          }
+        },
+        error: function (data) {
+
+          alert(data.message);
+        }
+      });
+    });
+    function b(email) {
+      var params = { "email": email };
+      var form = $(this);
+      $.ajax({
+        type: 'POST',
+        data: params,
+        url: '/inviteUser/{{albumId}}',
+
+        success: function (result) {
+          alert(result);
+
+        },
+        error: function (error) {
+          alert(error);
+        },
+
+      })
+    };
+
+  </script>
+</body>
+
+</html>

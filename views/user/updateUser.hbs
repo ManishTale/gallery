@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Update UserInfo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="/css/style.css" rel="stylesheet" type="text/css" media="all" />
+  <link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <style>
+    .navbar {
+      margin-bottom: 50px;
+      border-radius: 0;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- main -->
+  <div class="main-w3layouts wrapper">
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/user">Profile</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/dashboard">Home</a></li>
+
+
+
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/signout"><span class="glyphicon glyphicon-user"></span>Logout</a></li>
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+
+
+    <form id='submitForm'>
+      <div class="container">
+
+
+        <label for="email"><b>Email</b></label>
+        <input type="text" placeholder="Enter Email" name="email">
+        <label for="userName"><b>UserName</b></label>
+        <input type="text" placeholder="Enter Email" name="userName">
+
+        <label for="oldPassword"><b>Old Password</b></label>
+        <input type="password" placeholder="old Password" name="oldPassword">
+
+        <label for="newPassword"><b>new Password</b></label>
+        <input type="password" placeholder="new Password" name="newPassword">
+        <hr>
+
+
+        <button type="submit" class="update" name='update'>Update</button>
+        <span id='error'> </span>
+      </div>
+
+
+    </form>
+    <!-- copyright -->
+    <div class="colorlibcopy-agile">
+      <p>© 2019 C Solulab. All rights reserved </p>
+    </div>
+
+  </div>
+  <!-- //main -->
+  <script>
+
+
+
+    $("#submitForm").submit(function (e) {
+
+      e.preventDefault(); // avoid to execute the actual submit of the form.
+
+      var form = $(this);
+      var url = '/updateUserInfo';
+
+      $.ajax({
+        type: "PUT",
+        url: url,
+        data: form.serialize(), // serializes the form's elements.
+        success: function (data) {
+          alert(data.message);
+
+        },
+        error: function (data) {
+
+          alert(data.message);
+        }
+      });
+
+
+    });
+
+
+
+  </script>
+
+</body>
+
+</html>

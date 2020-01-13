@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>shared Albums</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+  <style>
+    /* Remove the navbar's default rounded borders and increase the bottom margin */
+    .navbar {
+      margin-bottom: 50px;
+      border-radius: 0;
+    }
+
+    .panel-height {
+
+      height: 340px;
+    }
+
+    /* Remove the jumbotron's default bottom margin */
+
+    /* Add a gray background color and some padding to the footer */
+    footer {
+      background-color: #f2f2f2;
+      padding: 25px;
+    }
+  </style>
+</head>
+
+<body>
+
+
+
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/user">Profile</a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="/dashboard">Home</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/signout"><span class="glyphicon glyphicon-user"></span>Logout</a></li>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      {{#each albums}}
+      <div class="col-sm-4">
+
+        <div class="panel panel-primary">
+          <div class="panel-heading">{{@key}}</div>
+
+
+          <div class="panel-body panel-height"><img src='/getDocument/{{this}}' class="img" style="width:100%"
+              alt="Image"></div>
+          <button type="button" class="col-sm-6 btn btn-primary" id='{{this}}' onclick="request(this.id)">View</button>
+          <button type="button" class="shareBy col-sm-6 btn btn-primary" id='{{this}}' name="shareBy">SharedBY</button>
+          <br><br>
+        </div>
+
+      </div>
+      {{/each}}
+    </div>
+
+
+
+    <footer class="container-fluid text-center" style="background-color:black">
+      <p style="color:blanchedalmond">2019 @Solulab Inc Copyright</p>
+
+    </footer>
+
+    <script>
+
+      function request(id) {
+        window.location.href = '/documents/' + id;
+      }
+
+
+
+      $("button[name='shareBy']").click(function () {
+
+        var id = $(this).attr("id");
+        $.ajax({
+
+          url: '/sharedUser/' + id,
+
+          success: function (result) {
+
+            alert(result)
+          },
+          error: function (error) {
+            alert(result.message)
+          },
+
+        })
+
+      })
+
+    </script>
+</body>
+
+</html>

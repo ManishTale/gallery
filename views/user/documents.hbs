@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Documents</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <style>
+    /* Remove the navbar's default rounded borders and increase the bottom margin */
+
+    .navbar {
+      margin-bottom: 50px;
+      border-radius: 0;
+    }
+
+    /* Add a gray background color and some padding to the footer */
+    footer {
+      background-color: #f2f2f2;
+      padding: 25px;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="/dashboard">Home</a></li>
+          <li><a href="/uploadDocument/{{albumId}}">add documents</a></li>
+
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/signout"><span class="glyphicon glyphicon-user"></span>Logout</a></li>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+
+
+  <div class="container">
+    <div class="row">
+      {{#each paths}}
+      <div class="col-sm-4">
+
+
+        <div class="panel-body"><img src="/{{@key}}" class="img-responsive" style="width:100%" alt="Image"></div>
+        <button type="button" class="col-sm-8 btn btn-primary" id='{{this}}' name="delete">delete</button>
+
+      </div>
+      {{/each}}
+    </div>
+
+  </div>
+
+
+
+  <footer class="container-fluid text-center" style="background-color:black">
+    <p style="color:blanchedalmond">2019 @Solulab Inc Copyright</p>
+
+  </footer>
+  <script>
+    $("button[name='delete']").click(function () {
+
+      var id = $(this).attr("id");
+      $.ajax({
+        method: 'DELETE',
+        url: '/deleteDocument/' + id,
+
+        success: function (result) {
+          location.reload();
+
+        },
+        error: function (error) {
+          console.log("error", error)
+        },
+
+      })
+
+    })
+
+  </script>
+</body>
+
+</html>

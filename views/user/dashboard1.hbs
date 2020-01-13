@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Dashboard</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src='/javascripts/main.js'></script>
+  <style>
+    /* Remove the navbar's default rounded borders and increase the bottom margin */
+    .navbar {
+      margin-bottom: 50px;
+      border-radius: 0;
+    }
+
+    .panel-height {
+
+      height: 340px;
+    }
+
+    /* Remove the jumbotron's default bottom margin */
+    .jumbotron {
+      margin-bottom: 0;
+    }
+
+    /* Add a gray background color and some padding to the footer */
+    footer {
+      background-color: #f2f2f2;
+      padding: 25px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="jumbotron">
+    <div class="container text-center">
+      <h1>Gallery</h1>
+
+    </div>
+  </div>
+
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/user">Profile</a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="/dashboard">Home</a></li>
+          <li><a href="/addAlbum">add Albums</a></li>
+          <li><a id='sharedAlbums' href='/sharedAlbums/{{user_id}}'>sharedTo me Albums</a></li>
+          <li><a href="/sharedToUser/{{user_id}}">sharedBY me Albums</a></li>
+          <li><a href="/sentInvitations/{{user_id}}">sent Invitations</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/signout"><span class="glyphicon glyphicon-user"></span>Logout</a></li>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      {{#each albums}}
+      <div class="col-sm-4">
+
+        <div class="panel panel-primary">
+          <div class="panel-heading">{{@key}}</div>
+
+          <div class="panel-body panel-height"><img src='getDocument/{{this}}' id='{{this}}' class="img"
+              style="width:100%" alt="Image"></div>
+          <button type="button" class="col-sm-4 btn btn-primary" id='{{this}}' name="edit">Edit</button>
+          <button type="button" class="col-sm-4 btn btn-primary" id='{{this}}'
+            onclick='request1(this.id)'>Share</button>
+          <button type="button" class="col-sm-4 btn btn-primary" id='{{this}}' name="delete">Delete</button>
+
+          <br><br>
+        </div>
+
+      </div>
+      {{/each}}
+    </div>
+
+
+
+    <footer class="container-fluid text-center" style="background-color:black">
+      <p style="color:blanchedalmond">2019 @Solulab Inc Copyright</p>
+
+    </footer>
+
+
+
+    <script>
+      $(".img").click(function () {
+
+        var id = $(this).attr("id");
+        window.location.href = '/documents/' + id;
+
+      })
+      $("button[name='edit']").click(function () {
+        var name = $(".panel-heading").val();
+        var person = prompt("Please enter new Album name:");
+        if (person == null || person == "") {
+          txt = "User cancelled the prompt.";
+        } else {
+          var id = $(this).attr("id");
+          var params = { 'albumName': person };
+          $.ajax({
+            method: 'PUT',
+            data: params,
+            url: '/editAlbum/' + id,
+
+            success: function (result) {
+              $(this).html(person);
+              location.reload();
+
+            },
+            error: function (error) {
+              alert(error)
+            },
+
+          })
+        }
+      })
+      $("button[name='delete']").click(function () {
+
+        var id = $(this).attr("id");
+
+        $.ajax({
+          method: 'DELETE',
+
+          url: '/deleteAlbum/' + id,
+          success: function (result) {
+            location.reload();
+
+          },
+          error: function (error) {
+            alert(error)
+          },
+        })
+      })
+      function request1(id) {
+        window.location.href = '/getShare/' + id;
+      }
+    </script>
+</body>
+
+</html>
